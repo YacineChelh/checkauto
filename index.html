@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0E1217">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CheckAuto">
 <meta name="description" content="Maquette interactive d'une application Android d'inspection de véhicules : voiture, utilitaire, moto et camion.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="CheckAuto · maquette de Yacine CHELH">
@@ -233,6 +236,119 @@ body{background:var(--bg);color:var(--fg);font-family:'Manrope','Inter',system-u
 @keyframes w-breathe{0%,100%{opacity:.75;transform:translate(-50%,-52%) scale(1)}50%{opacity:1;transform:translate(-50%,-52%) scale(1.06)}}
 @media (max-width:860px){.w-main{grid-template-columns:minmax(0,1fr)}.w-visual{order:2}.w-phone{--ws:.5}.w-prog{max-width:none}.wl{min-height:0}}
 @media (prefers-reduced-motion:reduce){.wl *,.wl *::before{animation:none!important;transition:none!important}.w-step.on>*{opacity:1;transform:none}}
+/* ===== Mobile immersif, panneau de test, animations fluides, retours tactiles ===== */
+.frame{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.frame textarea,.frame input{-webkit-user-select:text;user-select:text;font-size:16px!important}
+.frame .body.sc{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.frame .stepok{display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 10px;border-radius:14px;background:#E7F6EF;color:#0B5F43;font-size:12px;font-weight:800;border:1px solid #BFE5D3;flex:none}
+.frame .qchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.frame .qchip{height:28px;padding:0 10px;border-radius:14px;background:#F2F4F7;font-size:12px;font-weight:700;color:#475467;display:inline-flex;align-items:center;border:1px solid #E4E7EC}
+
+/* --- retours tactiles --- */
+.frame [data-act]{transition:transform .14s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease}
+.frame .btn:active,.frame .chip:active,.frame .stepok:active,.frame .qchip:active,.frame .stab:active{transform:scale(.95)}
+.frame .ib:active{transform:scale(.88)}
+.frame .nav>div:active{transform:scale(.9)}
+.frame .nav .fab:active{transform:scale(.94)}
+.frame .card[data-act]:active,.frame .li[data-act]:active,.frame .kor:active,.frame .tocr:active{transform:scale(.985)}
+.frame .seg>div:active{opacity:.7}
+.frame .chip{transition:background-color .22s ease,border-color .22s ease,color .22s ease,transform .14s ease}
+
+/* --- transitions d'écran --- */
+@keyframes scrIn{from{opacity:.25;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes scrInB{from{opacity:.25;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@keyframes fadeI{from{opacity:.2}to{opacity:1}}
+@keyframes cardUp{from{opacity:.2;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%)}}
+.frame.in-fwd .app,.frame.in-fwd .stp,.frame.in-fwd .subtabs{animation:scrIn .34s cubic-bezier(.2,.8,.2,1) backwards}
+.frame.in-back .app,.frame.in-back .stp,.frame.in-back .subtabs{animation:scrInB .34s cubic-bezier(.2,.8,.2,1) backwards}
+.frame.in-fade .body>*{animation:fadeI .26s ease backwards}
+.frame.in-fwd .body>*,.frame.in-back .body>*{animation:cardUp .44s cubic-bezier(.2,.8,.2,1) backwards}
+.frame.in-fwd .body>*:nth-child(1),.frame.in-back .body>*:nth-child(1){animation-delay:.02s}
+.frame.in-fwd .body>*:nth-child(2),.frame.in-back .body>*:nth-child(2){animation-delay:.06s}
+.frame.in-fwd .body>*:nth-child(3),.frame.in-back .body>*:nth-child(3){animation-delay:.10s}
+.frame.in-fwd .body>*:nth-child(4),.frame.in-back .body>*:nth-child(4){animation-delay:.14s}
+.frame.in-fwd .body>*:nth-child(5),.frame.in-back .body>*:nth-child(5){animation-delay:.18s}
+.frame.in-fwd .body>*:nth-child(6),.frame.in-back .body>*:nth-child(6){animation-delay:.22s}
+.frame.in-fwd .body>*:nth-child(n+7),.frame.in-back .body>*:nth-child(n+7){animation-delay:.26s}
+.frame .sheet.in{animation:sheetUp .38s cubic-bezier(.2,.85,.25,1) backwards}
+.frame .sheetdim.in{animation:fadeI .28s ease backwards}
+.frame .toc.in,.frame .annot.in{animation:scrIn .3s cubic-bezier(.2,.8,.2,1) backwards}
+
+/* --- message flottant --- */
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:11px 16px;border-radius:12px;font-size:14px;font-weight:700;line-height:1.35;z-index:90;max-width:min(92vw,420px);text-align:center;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.28);font-family:'Manrope',system-ui,sans-serif}
+#toast[hidden]{display:none}
+#toast.show{animation:toastIn .3s cubic-bezier(.2,.8,.2,1) both}
+body.imm #toast{bottom:calc(108px + env(safe-area-inset-bottom,0px))}
+
+/* --- mode immersif (téléphone) --- */
+body.imm{padding:0;background:#0D1015}
+body.imm .pg{gap:0;max-width:none}
+body.imm .pg-head,body.imm .pg-list,body.imm .pg-side,body.imm .pg-hint,body.imm .pg-toggle{display:none}
+body.imm .pg-proto{display:block}
+body.imm .pg-stage{gap:0;width:100%}
+body.imm .pg-phonebox{padding:0;border-radius:0;background:#0D1015;width:100%;min-height:100vh;min-height:100dvh;align-items:center}
+body.imm .pg-phonewrap{border-radius:0;box-shadow:none}
+
+/* --- bouton Test et tiroir --- */
+.tp-fab{display:none;position:fixed;top:calc(env(safe-area-inset-top,0px) + 4px);left:50%;transform:translateX(-50%);z-index:70;height:28px;padding:0 13px;border-radius:14px;border:0;background:#F5A300;color:#111418;font:800 12px/28px 'Manrope',system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.35);cursor:pointer}
+.tp-fab span{opacity:.7;font-weight:700;margin-left:2px}
+body.imm .tp-fab{display:block}
+.tp-dim{position:fixed;inset:0;background:rgba(8,10,14,.58);opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:80}
+.tp-drawer{position:fixed;left:0;right:0;bottom:0;max-height:88vh;max-height:88dvh;background:var(--panel);color:var(--fg);border-radius:24px 24px 0 0;transform:translateY(104%);transition:transform .4s cubic-bezier(.2,.85,.25,1);z-index:85;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);font-family:'Manrope',system-ui,sans-serif;box-shadow:0 -12px 40px rgba(0,0,0,.35)}
+#tpdb{display:flex;flex-direction:column;min-height:0;flex:1}
+body.tp-open .tp-dim{opacity:1;pointer-events:auto}
+body.tp-open .tp-drawer{transform:none}
+.tp-grip{width:44px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 6px;cursor:pointer;flex:none}
+.tp-tabs{display:flex;gap:4px;margin:4px 16px 0;padding:4px;background:var(--bg);border-radius:12px;flex:none}
+.tp-tabs button{flex:1;font:inherit;font-size:14px;font-weight:700;border:0;background:transparent;color:var(--muted);padding:9px 8px;border-radius:9px;cursor:pointer}
+.tp-tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.tp-body{overflow-y:auto;padding:14px 16px 22px;overscroll-behavior:contain;min-height:0}
+
+/* --- contenu du panneau (tiroir et colonne de droite) --- */
+.tp-side{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.tp-side h3{margin:0 0 10px}
+.tp-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.tp-sum div{background:var(--bg);border-radius:12px;padding:10px 10px 9px;min-width:0}
+.tp-sum b{display:block;font-size:20px;font-weight:800;letter-spacing:-.6px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tp-sum small{font-size:12px;font-weight:700;color:var(--muted)}
+.tp-sum span{display:block;font-size:11px;font-weight:700;color:var(--muted);margin:2px 0 6px}
+.tp-bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.tp-bar i{display:block;height:100%;background:var(--accent);border-radius:2px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.tp-side h4,.tp-body h4{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.tp-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.tp-list li{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;line-height:1.4;padding:7px 2px;color:var(--fg)}
+.tp-list li:not(.ok){color:var(--muted)}
+.tp-ck{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .3s cubic-bezier(.2,.8,.2,1)}
+.tp-list li.ok .tp-ck{background:#12805C;border-color:#12805C;transform:scale(1.06)}
+.tp-scr{display:flex;flex-wrap:wrap;gap:6px}
+.tp-scr button{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.tp-scr button.seen i{width:7px;height:7px;border-radius:50%;background:#12805C;display:inline-block}
+.tp-scr button.cur{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tp-tool{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:4px;padding:12px 0;border-bottom:1px solid var(--line)}
+.tp-tool b{display:block;font-size:14px}
+.tp-tool span{font-size:12px;color:var(--muted);font-weight:500}
+.tp-sw{flex:none;width:48px;height:28px;border-radius:14px;background:var(--line);position:relative;cursor:pointer;transition:background .25s}
+.tp-sw i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:11px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.tp-sw.on{background:#12805C}
+.tp-sw.on i{transform:translateX(20px)}
+.tp-btns{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.tp-btns.row{flex-direction:row;flex-wrap:wrap;margin-top:0}
+.tp-b{font:inherit;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;transition:transform .14s}
+.tp-b:active{transform:scale(.97)}
+.tp-b.pri{background:var(--accent);color:#111418;border-color:var(--accent)}
+.tp-segc{display:flex;gap:4px;background:var(--bg);padding:4px;border-radius:12px}
+.tp-segc button{flex:1;font:inherit;font-size:13px;font-weight:700;border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;cursor:pointer}
+.tp-segc button.on{background:var(--fg);color:var(--bg)}
+.tp-tour{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:75;display:flex;align-items:center;gap:12px;background:#111418;color:#fff;border-radius:16px;padding:10px 10px 10px 16px;font:700 14px 'Manrope',system-ui,sans-serif;box-shadow:0 12px 36px rgba(0,0,0,.4);max-width:92vw;animation:toastIn .3s cubic-bezier(.2,.8,.2,1) both}
+.tp-tour[hidden]{display:none}
+.tp-tour button{font:inherit;font-size:13px;font-weight:800;border:0;background:#F5A300;color:#111418;border-radius:10px;padding:8px 12px;cursor:pointer;flex:none}
+body.imm .tp-tour{bottom:calc(112px + env(safe-area-inset-bottom,0px))}
+
+@media (prefers-reduced-motion:reduce){
+  .frame *,.tp-drawer,.tp-dim,.tp-bar i,.tp-sw,.tp-sw i,#toast,.tp-tour{animation:none!important;transition:none!important}
+}
 
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -510,7 +626,7 @@ function groupCard(g){
   const ko=koItems([g]).length;
   return `<div class="card" data-gc="${g.key}"><div class="gh"><div class="h2">${g.title}</div><em>${g.items.length} points${ko?` · <span style="color:${K.redtx}">${ko} à revoir</span>`:''}</em><a data-act="grpok" data-g="${g.key}">Tout ok</a></div><div class="chips">${g.items.map((it,i)=>chip(it+(isReq(it)?' *':'')+(hasNote(g.key,i)?' '+ic('pen',13,K.sub):''),stOf(g.key,i),`data-act="cyc" data-g="${g.key}" data-i="${i}"`)).join('')}</div>${ko?`<div class="kors">${koRows(g)}</div>`:''}${grem('g:'+g.key)}</div>`;
 }
-function summaryLine(step){const s=stepStats(step),m=missingPhotos(step);return `<div class="cap"><b>${s.n} points</b> pour ${T().label.toLowerCase()} · ${s.ko?`<span style="color:${K.redtx}">${s.ko} à revoir</span>`:'tous RAS par défaut'}${m?` · <span style="color:${K.redtx}">${m} photo${m>1?'s':''} manquante${m>1?'s':''}</span>`:''}</div><div class="cap" style="font-weight:500">Appui long sur un point : commentaire, photo, action.</div>`;}
+function summaryLine(step){const s=stepStats(step),m=missingPhotos(step);return `<div class="cap" style="display:flex;align-items:center;gap:8px"><span class="sp"><b>${s.n} points</b> pour ${T().label.toLowerCase()} · ${s.ko?`<span style="color:${K.redtx}">${s.ko} à revoir</span>`:'tous RAS par défaut'}${m?` · <span style="color:${K.redtx}">${m} photo${m>1?'s':''} manquante${m>1?'s':''}</span>`:''}</span><span class="stepok" data-act="stepok" data-s="${step}">${ic('check',14,K.grn)}Tout ok</span></div><div class="cap" style="font-weight:500">Appui long sur un point : commentaire, photo, action.</div>`;}
 
 /* ---------- schémas ---------- */
 function drawBody(kind){
@@ -559,6 +675,7 @@ function sheetPoint(){
   <div class="seg" style="margin-bottom:14px">${[['ok','Ok'],['ko','Défaut'],['na','Non concerné']].map(x=>`<div class="${v===x[0]?(x[0]==='ko'?'':'on'):''}" ${v===x[0]&&x[0]==='ko'?'style="background:#D92D20;color:#fff"':''} data-act="ptst" data-v="${x[0]}">${x[1]}</div>`).join('')}</div>
   <div class="lbl2">Commentaire</div>
   <textarea id="ptc" class="fld ta" placeholder="Ajouter un commentaire…">${esc(n.comment)}</textarea>
+  <div class="qchips">${['RAS','Usure normale','À surveiller','À remplacer'].map(t=>`<span class="qchip" data-act="ptchip" data-t="${esc(t)}">${t}</span>`).join('')}</div>
   <div class="lbl2" style="margin-top:12px">Fichiers multimédias</div>
   <div class="row" style="gap:10px">${thumbs(n.photos,'ptphoto',k)}</div>
   <div class="row" style="margin-top:8px;gap:8px"><div class="chip" style="height:34px;font-size:13px" data-act="ptvideo">${ic('cam',16,K.sub)}Vidéo · ${(S.videos&&S.videos[k])||0}</div><span style="font-size:11px;font-weight:600;color:${K.mute}">3 min maximum · touchez une photo pour l'annoter</span></div>
@@ -720,7 +837,7 @@ function render(){
   wrap.innerHTML=SCREENS[S.scr]?SCREENS[S.scr]():STATIC[S.scr]; wrap.dataset.scr=S.scr+S.sub3;
   const f=wrap.firstElementChild;
   if(!SCREENS[S.scr]){$$('.nav>div',f).forEach((d,k)=>{d.dataset.act='nav';d.dataset.v=k;});}
-  if(S.scr==='onboarding'){$('.btn.amb',f).dataset.act='home';}
+  if(S.scr==='onboarding'){$('.btn.amb',f).dataset.act='home';const gh=$('.btn.ghost',f);if(gh){gh.dataset.act='toast';gh.dataset.v='Connexion simulée dans la maquette.';}}
   const nsc=$('.body.sc',f);
   if(nsc){ if(S.anchor){const el=$(`[data-gc="${S.anchor}"]`,nsc);if(el)nsc.scrollTop=Math.max(0,el.offsetTop-8);S.anchor=null;} else if(same) nsc.scrollTop=top; }
   fit(); side(); list();
@@ -802,9 +919,9 @@ function act(a,d){
   if(typeof post==='function')post(a,d);
   render();
 }
-let tt; function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;z-index:50;max-width:90vw';document.body.appendChild(t);}t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2200);}
+let tt; function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.setAttribute('role','status');document.body.appendChild(t);}t.textContent=m;t.hidden=false;t.classList.remove('show');void t.offsetWidth;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>{t.classList.remove('show');t.hidden=true;},2400);}
 const phone=$('#phone'); let lp=null,lpFired=false;
-phone.addEventListener('click',e=>{if(lpFired){lpFired=false;return;}const el=e.target.closest('[data-act]'); if(el) act(el.dataset.act,el.dataset);});
+phone.addEventListener('click',e=>{if(lpFired){lpFired=false;return;}const el=e.target.closest('[data-act]'); if(el){if(typeof trackAct==='function')trackAct(el.dataset.act,el.dataset);act(el.dataset.act,el.dataset);}else if(e.target.closest('.ib,.btn,.chip,.stab,.seg>div')){toast('Cette fonction est simulée dans la maquette.');}});
 phone.addEventListener('pointerdown',e=>{const el=e.target.closest('[data-act="cyc"]'); if(!el)return; lp=setTimeout(()=>{lpFired=true;act('pt',el.dataset);},520);});
 ['pointerup','pointerleave','pointercancel'].forEach(ev=>phone.addEventListener(ev,()=>clearTimeout(lp)));
 phone.addEventListener('contextmenu',e=>{const el=e.target.closest('[data-act="cyc"]'); if(el){e.preventDefault();clearTimeout(lp);lpFired=true;act('pt',el.dataset);}});
@@ -891,7 +1008,7 @@ const stepM=(m)=>m[1]==='mm'?0.2:m[1]==='V'?0.1:1;
 
 /* ---------- état supplémentaire ---------- */
 Object.assign(S,{rem:{},remOpen:{},focusRem:null,offline:false,pending:0,log:[],sig:{insp:[],client:[],appr:[]},meas:{},annot:{},videos:{},apprReq:false,apprBy:'Chef de dépôt',apprTab:'req',apprState:null,flagDone:{},finished:[],
- vtab:'apercu',vsel:0,vehQ:'',vehF:'all',histQ:'',histF:'all',notifF:'all',notifRead:{},tmplSel:0,teTab:'questions',layout:'Classique',xs:null,syncProg:null,roleSel:0,integ:{geotab:true},subs:'Gratuit',obd:false,calc:{d:'0',acc:null,op:null},lastLog:'',
+ vtab:'apercu',vsel:0,vehQ:'',vehF:'all',histQ:'',histF:'all',notifF:'all',notifRead:{},tmplSel:0,teTab:'questions',layout:'Classique',xs:null,syncProg:null,roleSel:0,integ:{geotab:true},subs:'Gratuit',obd:false,calc:{d:'0',acc:null,op:null},lastLog:'',syncedOnce:false,mySig:null,last:null,
  sched:[{id:1,tpl:'Contrôle avant achat',veh:'Audi A3 · AB-123-CD',type:'voiture',due:'Aujourd\'hui 14:00',st:'today'},{id:2,tpl:'Contrôle de flotte',veh:'Renault Trafic · FG-482-LM',type:'utilitaire',due:'Aujourd\'hui 16:30',st:'today'},{id:3,tpl:'Contrôle avant achat',veh:'Yamaha MT-07 · GH-715-TR',type:'moto',due:'En retard · hier',st:'late'}],
  setg:{interval:'15 min',net:'Wi-Fi + données',offV:true,offP:true,offI:true,win:'1 sem.',limit:2,photoQ:'HD',gps:false,pubLinks:false,mfa:true,delAfter:false,region:'UE (Irlande)',tz:'Heure locale',lang:'Français',reportLang:'fr-FR',gpsReq:false},
  nt:{email:true,sms:false,push:true,locked:false},
@@ -899,6 +1016,7 @@ Object.assign(S,{rem:{},remOpen:{},focusRem:null,offline:false,pending:0,log:[],
  tq:[{t:'Texte',q:'Plaque d\'immatriculation',req:true,w:0},{t:'Nombre',q:'Kilométrage',req:true,w:0},{t:'Choix multiple',q:'Freins : état général',req:true,w:3},{t:'Choix multiple',q:'Pneus conformes ?',req:true,w:3,lg:{ask:true,note:true,media:true,action:true}},{t:'Curseur',q:'Usure des plaquettes',req:false,w:2},{t:'Case à cocher',q:'Extincteur présent',req:false,w:1},{t:'Annotation',q:'Marquer les chocs sur le schéma',req:false,w:0},{t:'Média',q:'Photo du compteur',req:true,w:0},{t:'Instruction',q:'Garer le véhicule sur terrain plat',req:false,w:0},{t:'Signature',q:'Signature de l\'inspecteur',req:true,w:0}],
  title:{Site:true,'Date d\'inspection':true,Personne:true,'Lieu d\'inspection':false,'N° de document':true,'Actif (véhicule)':true,Société:false},
  tset:{note:false,media:false,action:false,fin:true,score:true,multi:false},ml:{'fr-FR':true,'fr-CA':false,'fr-BE':false,'fr-CH':false,'en-GB':true},lg:null,tsel:null});
+const SAMPLE_LAST={type:'voiture',st:{'mec4|4':'ko'},defects:{'Capot':{type:'Impact',sev:'Moyen',cost:350,photos:1,comment:'Impact ancien, réparé'}},meas:{'voiture|3':3.2},rem:{s5:'Pneus à surveiller au prochain entretien.',g:'Véhicule globalement sain.'}};
 const _rs=resetInspection;
 resetInspection=function(){_rs();Object.assign(S,{rem:{},remOpen:{},focusRem:null,sig:{insp:[],client:[],appr:[]},meas:{},annot:{},videos:{},apprReq:false,apprState:null,apprTab:'req',flagDone:{},log:[],xs:null});};
 
@@ -948,17 +1066,18 @@ function runSync(){
   if(!S.pending){toast('Tout est déjà synchronisé.');return;}
   if(S.offline){toast('Impossible hors ligne. Réactivez le réseau.');return;}
   S.syncProg=0;render();
-  const iv=setInterval(()=>{S.syncProg+=25;if(S.syncProg>=100){clearInterval(iv);S.syncProg=null;S.pending=0;toast('Synchronisation terminée.');}render();},450);
+  const iv=setInterval(()=>{S.syncProg+=25;if(S.syncProg>=100){clearInterval(iv);S.syncProg=null;S.pending=0;S.syncedOnce=true;toast('Synchronisation terminée.');}render();},450);
 }
 
 /* ---------- remarques (par point, par étape, globale) ---------- */
 function remCard(key,title,ph){
   const v=S.rem[key]||'';
-  return `<div class="card" data-gc="rem-${key}"><div class="gh"><div class="h2">${title}</div><em>${v.length?v.length+' car.':'facultatif'}</em></div><textarea class="fld ta" data-rem="${key}" placeholder="${ph||'Ajouter une remarque…'}">${esc(v)}</textarea><div style="font-size:11px;color:${K.mute};font-weight:600;margin-top:6px">${ic('mic',13,K.mute)} Touchez le micro en haut pour dicter.</div></div>`;
+  return `<div class="card" data-gc="rem-${key}"><div class="gh"><div class="h2">${title}</div><em>${v.length?v.length+' car.':'facultatif'}</em></div><textarea class="fld ta" data-rem="${key}" placeholder="${ph||'Ajouter une remarque…'}">${esc(v)}</textarea>${qchips(key)}<div style="font-size:11px;color:${K.mute};font-weight:600;margin-top:6px">${ic('mic',13,K.mute)} Touchez le micro en haut pour dicter.</div></div>`;
 }
+const qchips=k=>`<div class="qchips">${['RAS','Usure normale','À surveiller','À remplacer'].map(t=>`<span class="qchip" data-act="remchip" data-k="${k}" data-t="${esc(t)}">${t}</span>`).join('')}</div>`;
 function grem(k){
   const v=S.rem[k]||'',open=v||S.remOpen[k];
-  return open?`<textarea class="fld ta" data-rem="${k}" style="height:64px;margin-top:10px" placeholder="Remarque sur ce groupe…">${esc(v)}</textarea>`:`<div class="remadd" data-act="remopen" data-k="${k}">${ic('pen',16,K.sub)}Ajouter une remarque</div>`;
+  return open?`<textarea class="fld ta" data-rem="${k}" style="height:64px;margin-top:10px" placeholder="Remarque sur ce groupe…">${esc(v)}</textarea>${qchips(k)}`:`<div class="remadd" data-act="remopen" data-k="${k}">${ic('pen',16,K.sub)}Ajouter une remarque</div>`;
 }
 const gtitle=x=>x==='meas'?'Mesures chiffrées':(allGroups().find(g=>g.key===x)||{title:x}).title;
 function remList(){
@@ -997,7 +1116,7 @@ SCREENS.home=()=>{
     ${late.length?`<div class="lbl2" style="margin:8px 0 0;color:${K.redtx}">En retard · ${late.length}</div>${late.map(sch).join('')}`:''}
     ${due.length?`<div class="lbl2" style="margin:8px 0 0">Aujourd'hui · ${due.length}</div>${due.map(sch).join('')}`:''}
     ${!late.length&&!due.length?`<div class="cap" style="padding:14px 0">Rien de prévu. Planifiez une inspection récurrente.</div>`:''}</div>
-   <div class="row" style="gap:8px"><div class="chip" style="flex:1;justify-content:center" data-act="newinsp">${ic('copy',18,K.sub)}Dupliquer</div><div class="chip" style="flex:1;justify-content:center" data-act="goto" data-v="models">${ic('grid',18,K.sub)}Modèle</div><div class="chip" style="flex:1;justify-content:center" data-act="obdtoggle">${ic('bolt',18,K.sub)}OBD</div></div>
+   <div class="row" style="gap:8px"><div class="chip" style="flex:1;justify-content:center" data-act="dupli">${ic('copy',18,K.sub)}Dupliquer</div><div class="chip" style="flex:1;justify-content:center" data-act="goto" data-v="models">${ic('grid',18,K.sub)}Modèle</div><div class="chip" style="flex:1;justify-content:center" data-act="obdtoggle">${ic('bolt',18,K.sub)}OBD</div></div>
    <div class="card" style="padding:2px 14px"><div class="lbl2" style="margin:14px 0 0">Récentes</div>
     ${S.finished.map(f=>`<div class="li"><div class="av">${ic(DATA[f.type].icon,22,K.sub)}</div><div class="sp"><div class="m">${f.n}</div><div class="d">À l'instant · ${f.km} km</div></div>${tagV(f.v)}</div>`).join('')}
     <div class="li"><div class="av">${ic('van',22,K.sub)}</div><div class="sp"><div class="m">Renault Trafic</div><div class="d">Hier · 142 000 km</div></div>${tagV('ok')}</div>
@@ -1070,7 +1189,7 @@ SCREENS.tedit=()=>{
 };
 
 /* ---------- profil et réglages ---------- */
-SCREENS.profile=()=>frame(`<div class="app"><div style="width:10px"></div><div class="tt"><div class="t">Profil</div></div><div class="ib">${ic('more',24)}</div></div>
+SCREENS.profile=()=>frame(`<div class="app"><div style="width:10px"></div><div class="tt"><div class="t">Profil</div></div><div class="ib" data-act="toast" data-v="Menu du profil (simulé)">${ic('more',24)}</div></div>
  <div class="body sc" style="top:92px;gap:10px">${offBanner()}
   <div class="card row" style="gap:14px"><div style="width:52px;height:52px;border-radius:26px;background:${K.ink};color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800">YC</div><div class="sp"><div style="font-size:17px;font-weight:800;letter-spacing:-.3px">Yacine Chelh</div><div style="font-size:13px;color:${K.mute};font-weight:500">Garage Chelh</div></div><span class="tag w">${S.subs==='Gratuit'?'Gratuit':S.subs}</span></div>
   <div class="card" style="padding:2px 16px">${rowGo('doc','Logo et infos du rapport','Nom, adresse, mentions légales','report')}${rowGo('euro','Barème des coûts','Rayure 120 €, impact 350 €…','costs')}${rowGo('sync','Synchronisation et hors ligne',S.pending?S.pending+' à envoyer':'Tout est synchronisé','sync',`<span class="tag ${S.pending?'w':'ok'}">${S.pending?S.pending:'À jour'}</span>`)}${rowGo('bell','Notifications','E-mail, SMS, push','notifset')}</div>
@@ -1105,7 +1224,8 @@ SCREENS.subs=()=>{const P=[['Gratuit','0 €','5 modèles actifs · PDF · 1 uti
 /* ---------- conclusion, revue, approbation, fin, rapport ---------- */
 function sigPad(k,label){
   const st=S.sig[k]||[];
-  return `<div class="card"><div class="gh"><div class="h2">${label}</div><a data-act="sigclr" data-k="${k}">Effacer</a></div><svg class="sigpad" data-draw="sig:${k}" viewBox="0 0 300 110" width="100%" height="110">${st.map(d=>`<path d="${d}" fill="none" stroke="${K.ink}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}<path id="live" d="" fill="none" stroke="${K.ink}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${st.length?'':`<text x="150" y="60" text-anchor="middle" font-size="13" fill="#98A2B3" font-family="Manrope,Arial" font-weight="600">Signez ici avec le doigt</text>`}</svg>${st.length?`<div style="font-size:12px;color:${K.mute};font-weight:600;margin-top:6px">Signé par Yacine Chelh · 05/11/2026 ${hm0()}</div>`:''}</div>`;
+  const saved=(k==='insp'&&S.mySig&&!st.length)?`<div class="btn soft" style="height:40px;font-size:14px;margin-bottom:8px" data-act="sigsaved">${ic('pen',16)}Utiliser ma signature enregistrée</div>`:'';
+  return `<div class="card"><div class="gh"><div class="h2">${label}</div><a data-act="sigclr" data-k="${k}">Effacer</a></div>${saved}<svg class="sigpad" data-draw="sig:${k}" viewBox="0 0 300 110" width="100%" height="110">${st.map(d=>`<path d="${d}" fill="none" stroke="${K.ink}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}<path id="live" d="" fill="none" stroke="${K.ink}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${st.length?'':`<text x="150" y="60" text-anchor="middle" font-size="13" fill="#98A2B3" font-family="Manrope,Arial" font-weight="600">Signez ici avec le doigt</text>`}</svg>${st.length?`<div style="font-size:12px;color:${K.mute};font-weight:600;margin-top:6px">Signé par Yacine Chelh · 05/11/2026 ${hm0()}</div>`:''}</div>`;
 }
 const hm0=()=>'14:'+String(2+S.log.length).padStart(2,'0');
 SCREENS.s6=()=>{
@@ -1170,7 +1290,7 @@ SCREENS.report=()=>{const t=T(),nd=Object.keys(S.defects).length+koAll(),c=cost(
     ${[100,90,95,70,100,60].slice(0,S.layout==='Compact'?3:6).map(w=>`<div style="height:6px;border-radius:3px;background:#E4E7EC;width:${w}%"></div>`).join('')}
     <div style="margin-top:auto;display:flex;gap:6px;align-items:flex-end">${S.sig.insp.length?`<svg width="70" height="26" viewBox="0 0 300 110" style="flex:none">${S.sig.insp.map(d=>`<path d="${d}" fill="none" stroke="${K.ink}" stroke-width="5"/>`).join('')}</svg>`:'<div style="font-size:9px;color:#98A2B3">Signature manquante</div>'}<div style="font-size:9px;color:${K.mute};font-weight:600">Yacine Chelh</div></div></div>
   </div>
-  <div class="foot" style="height:150px;flex-direction:column;gap:8px;padding-top:8px"><div class="btn ${S.offline?'soft':''}" data-act="${S.offline?'toast':'xopen'}" data-v="${S.offline?'Envoi à la prochaine synchronisation':'send'}">${ic('share',22,S.offline?K.ink:'#fff')}${S.offline?'Envoyer à la synchronisation':'Envoyer au client'}</div><div class="row" style="gap:8px"><div class="btn soft sp" style="height:42px;font-size:14px" data-act="xopen" data-v="export">Exporter</div><div class="btn soft sp" style="height:42px;font-size:14px" data-act="goto" data-v="audit">Historique</div></div></div><div class="gest"></div>${extSheets()}`);};
+  <div class="foot" style="height:158px;flex-direction:column;gap:8px;padding-top:8px;padding-bottom:22px"><div class="btn ${S.offline?'soft':''}" data-act="${S.offline?'toast':'xopen'}" data-v="${S.offline?'Envoi à la prochaine synchronisation':'send'}">${ic('share',22,S.offline?K.ink:'#fff')}${S.offline?'Envoyer à la synchronisation':'Envoyer au client'}</div><div class="row" style="gap:8px"><div class="btn soft sp" style="height:42px;font-size:14px" data-act="xopen" data-v="export">Exporter</div><div class="btn soft sp" style="height:42px;font-size:14px" data-act="goto" data-v="audit">Historique</div></div></div><div class="gest"></div>${extSheets()}`);};
 
 /* ---------- feuilles supplémentaires ---------- */
 const X={
@@ -1263,8 +1383,23 @@ const EXT={
  apprdec(d){if(!S.sig.appr.length){toast('Signature de l\'approbateur requise.');return false;}S.apprState=d.v;toast(d.v==='approved'?'Inspection approuvée : elle n\'est plus modifiable.':'Inspection rejetée.');},
  layout(d){S.layout=d.v;},
  expf(d){if(d.v==='pro'&&S.subs==='Gratuit'){toast('Réservé au plan Pro.');return false;}if(d.v==='team'&&S.subs!=='Équipe'){toast('Réservé au plan Équipe.');return false;}toast(d.n+' prêt.');S.xs=null;},
+ sigend(){if(S.sig.insp.length&&!S.mySig){S.mySig=S.sig.insp.slice();toast('Signature enregistrée pour les prochaines inspections.');}},
+ sigsaved(){S.sig.insp=S.mySig.slice();},
+ stepok(d){gl(+d.s).forEach(g=>Object.keys(S.st).filter(k=>k.startsWith(g.key+'|')).forEach(k=>delete S.st[k]));S.verdict=null;toast('Toute l\'étape est remise à « conforme ».');},
+ remchip(d){const k=d.k;S.rem[k]=((S.rem[k]||'')+(S.rem[k]?' ':'')+d.t).trim();S.remOpen[k]=true;S.focusRem=k;},
+ ptchip(d){const n=noteOf(S.pt.g+'|'+S.pt.i);n.comment=((n.comment||'')+(n.comment?' ':'')+d.t).trim();},
+ dupli(){
+  const L=S.last||SAMPLE_LAST;resetInspection();S.type=L.type;S.st=Object.assign({},L.st);S.meas=Object.assign({},L.meas);
+  S.defects=JSON.parse(JSON.stringify(L.defects));Object.values(S.defects).forEach(d=>d.photos=0);
+  Object.keys(L.rem).forEach(k=>{if(k!=='g')S.rem[k]=L.rem[k];});
+  S.scr='s1';toast('Dernière inspection dupliquée. Photos et signature à refaire.');
+ },
  finish(){
   if(!S.sig.insp.length){toast('La signature de l\'inspecteur est obligatoire.');return false;}
+  const auto=flagged().filter(x=>x.req&&S.flagDone[x.k]!=='act');
+  auto.forEach(x=>{S.flagDone[x.k]='act';S.actions.push({title:'Contrôler : '+x.l,prio:'Haute',label:x.l});});
+  if(auto.length)toast(auto.length+' action'+(auto.length>1?'s':'')+' de sécurité créée'+(auto.length>1?'s':'')+' automatiquement.');
+  S.last={type:S.type,st:Object.assign({},S.st),defects:JSON.parse(JSON.stringify(S.defects)),meas:Object.assign({},S.meas),rem:Object.assign({},S.rem)};
   const L=flagged();
   const sc=scoreAll();S.finished=[{n:T().veh.name,type:S.type,km:T().km,v:S.verdict==='ko'?'ko':(koAll()?'w':'ok'),ap:S.apprReq?'En attente':'—'}].concat(S.finished.filter(f=>f.n!==T().veh.name)).slice(0,3);
   S.scr=L.length?'flag':(S.apprReq?'appr':'done');
@@ -1330,6 +1465,222 @@ if(offt) offt.addEventListener('change',e=>{S.offline=e.target.checked;if(!S.off
 checks(); buildAssets(); render();
 const hh=(location.hash||'').slice(1); setTab(['proto','checks','store','style'].includes(hh)?hh:'proto');
 
+/* ======================================================================
+   MODE TEST, MOBILE IMMERSIF, ANIMATIONS, VISITE ET REMPLISSAGE AUTOMATIQUES
+   ====================================================================== */
+(function(){
+  const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mob=()=>window.matchMedia('(max-width:760px)').matches;
+  const VIS=new Set(),COV=new Set(),DONE={};
+  let TOTALSET=new Set(),tpTab='missions';
+  const SIG='M18 72 C34 24 52 100 82 52 S136 94 178 40 S226 74 262 46';
+  const CHECK='<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#fff"/></svg>';
+
+  /* ---------- missions (validées automatiquement) ---------- */
+  const MISSIONS=[
+   {id:'plus',t:'Créer une inspection avec le bouton +',ev:(a)=>a==='newinsp'},
+   {id:'type',t:'Choisir un autre véhicule (utilitaire, moto ou camion)',ev:(a,d)=>a==='type'&&d.v!=='voiture'},
+   {id:'defect',t:'Signaler un défaut sur le schéma',st:()=>Object.keys(S.defects).length>0},
+   {id:'rem',t:'Écrire une remarque (point, groupe, section ou finale)',st:()=>Object.keys(S.rem).some(k=>(S.rem[k]||'').trim())||Object.values(S.notes).some(n=>n.comment)},
+   {id:'meas',t:'Régler une mesure (pneu, pression, batterie)',ev:(a)=>a==='measinc'||a==='measdec'},
+   {id:'sig',t:'Signer avec le doigt',st:()=>S.sig.insp.length>0},
+   {id:'finish',t:'Terminer l\'inspection',st:()=>['flag','done','appr'].includes(S.scr)},
+   {id:'flag',t:'Créer des actions à la revue des points signalés',ev:(a)=>a==='flagone'||a==='flagall'},
+   {id:'off',t:'Passer en mode hors ligne',st:()=>S.offline},
+   {id:'sync',t:'Synchroniser après le hors ligne',st:()=>S.syncedOnce},
+   {id:'export',t:'Exporter le rapport',ev:(a,d)=>a==='expf'||(a==='xopen'&&d.v==='export')},
+   {id:'plan',t:'Planifier une inspection à l\'agenda',ev:(a)=>a==='plok'},
+   {id:'veh',t:'Ouvrir la fiche d\'un véhicule',ev:(a)=>a==='vopen'},
+   {id:'tpl',t:'Modifier une question d\'un modèle',ev:(a)=>['tq','tlogic','lgset','qadd'].includes(a)}
+  ];
+  window.trackAct=function(a,d){COV.add(a);MISSIONS.forEach(m=>{if(m.ev&&m.ev(a,d||{}))DONE[m.id]=true;});};
+  const checkMissions=()=>MISSIONS.forEach(m=>{if(!DONE[m.id]&&m.st&&m.st())DONE[m.id]=true;});
+
+  /* ---------- recensement de toutes les fonctions (pour la couverture) ---------- */
+  function crawl(){
+    const keep={};['scr','type','sub3','xs','toc','st','defects','sig','verdict','rem','offline','pending','notes','photos','actions','files','meas','sheet','pt','act','flagDone','remOpen'].forEach(k=>keep[k]=S[k]);
+    const all=new Set();
+    const grab=h=>{const d=document.createElement('div');d.innerHTML=h;d.querySelectorAll('[data-act]').forEach(e=>all.add(e.dataset.act));};
+    const scr=n=>SCREENS[n]?SCREENS[n]():STATIC[n];
+    try{
+      S.type='voiture';S.xs=null;S.pt=null;S.sheet=null;S.act=null;S.toc=false;
+      NAV.forEach(n=>{S.scr=n[0];S.sub3='schema';try{grab(scr(n[0]));}catch(e){}});
+      S.sub3='avant';try{grab(scr('s3'));}catch(e){}S.sub3='schema';
+      S.defects={Capot:{type:'Impact',sev:'Moyen',cost:350,photos:1}};S.st={'mec0|0':'ko'};
+      S.scr='s3';try{grab(scr('s3'));}catch(e){}S.scr='s5';try{grab(scr('s5'));}catch(e){}
+      S.sheet={z:'Capot',d:{type:'Impact',sev:'Moyen',cost:350,photos:1}};S.scr='s3';try{grab(scr('s3'));}catch(e){}S.sheet=null;
+      S.pt={g:'mec0',i:0};S.scr='s5';try{grab(scr('s5'));}catch(e){}S.pt=null;
+      S.act={key:'mec0|0',label:'x',title:'t',desc:'',prio:'Moyenne'};try{grab(scr('s5'));}catch(e){}S.act=null;
+      ['export','send','toolkit','calc','wont','plan','addveh','logout','qtype','tlogic','annot'].forEach(k=>{S.xs={k,id:1,i:0,key:'z|Capot|0'};S.scr='s5';try{grab(scr('s5'));}catch(e){}});
+      S.xs=null;S.toc=true;S.scr='s5';try{grab(scr('s5'));}catch(e){}S.toc=false;
+      ['home','vehicles','hist'].forEach(n=>{S.xs={k:'plan',id:1};S.scr=n;try{grab(scr(n));}catch(e){}});
+    }finally{Object.assign(S,keep);}
+    all.add('dictate');all.add('sigend');
+    return all;
+  }
+
+  /* ---------- panneau de test ---------- */
+  const esc2=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function stats(){
+    return {md:MISSIONS.filter(m=>DONE[m.id]).length,mt:MISSIONS.length,sv:NAV.filter(n=>VIS.has(n[0])).length,st:NAV.length,ac:[...COV].filter(a=>TOTALSET.has(a)).length,at:TOTALSET.size||1};
+  }
+  const bar=p=>`<div class="tp-bar"><i style="width:${Math.round(Math.min(1,p)*100)}%"></i></div>`;
+  function summary(){const s=stats();return `<div class="tp-sum">${[['Missions',s.md,s.mt],['Écrans vus',s.sv,s.st],['Fonctions',s.ac,s.at]].map(x=>`<div><b>${x[1]}<small>/${x[2]}</small></b><span>${x[0]}</span>${bar(x[1]/x[2])}</div>`).join('')}</div>`;}
+  function missions(){return `<ul class="tp-list">${MISSIONS.map(m=>`<li class="${DONE[m.id]?'ok':''}"><span class="tp-ck">${DONE[m.id]?CHECK:''}</span><span>${m.t}</span></li>`).join('')}</ul>`;}
+  function screens(){
+    const groups={};NAV.forEach(n=>(groups[n[2]]=groups[n[2]]||[]).push(n));
+    return Object.entries(groups).map(([g,ns])=>`<h4>${g}</h4><div class="tp-scr">${ns.map(n=>`<button type="button" data-tp="go" data-s="${n[0]}" class="${VIS.has(n[0])?'seen':''}${S.scr===n[0]?' cur':''}">${VIS.has(n[0])?'<i></i>':''}${n[1]}</button>`).join('')}</div>`).join('');
+  }
+  function tools(){
+    const th=document.documentElement.dataset.theme||'auto';
+    return `<div class="tp-tool"><div><b>Mode hors ligne</b><span>Les modifications s'accumulent puis partent à la synchronisation</span></div><div class="tp-sw${S.offline?' on':''}" role="switch" aria-checked="${S.offline}" tabindex="0" data-tp="offline"><i></i></div></div>
+    <div class="tp-btns">
+      <button type="button" class="tp-b pri" data-tp="autofill">Remplir l'inspection pour moi</button>
+      <button type="button" class="tp-b" data-tp="tour">Lancer la visite automatique</button>
+      <button type="button" class="tp-b" data-tp="reset">Tout réinitialiser</button>
+      <button type="button" class="tp-b" data-tp="welcome">Revoir l'accueil</button>
+    </div>
+    <h4>Thème</h4><div class="tp-segc">${[['auto','Auto'],['light','Clair'],['dark','Sombre']].map(x=>`<button type="button" data-tp="theme" data-v="${x[0]}" class="${th===x[0]?'on':''}">${x[1]}</button>`).join('')}</div>
+    <h4>Autres sections</h4><div class="tp-btns row"><button type="button" class="tp-b" data-tp="section" data-v="checks">Contrôles par véhicule</button><button type="button" class="tp-b" data-tp="section" data-v="store">Play Store</button><button type="button" class="tp-b" data-tp="section" data-v="style">Style</button></div>`;
+  }
+  function sideHTML(){return `<h3>Panneau de test</h3>${summary()}<h4>Missions</h4>${missions()}${tools()}`;}
+  function drawerHTML(){
+    const tabs=[['missions','Missions'],['screens','Écrans'],['tools','Outils']];
+    return `<div class="tp-tabs" role="tablist">${tabs.map(t=>`<button type="button" role="tab" aria-selected="${tpTab===t[0]}" data-tp="tab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div><div class="tp-body">${summary()}${tpTab==='missions'?missions():tpTab==='screens'?screens():tools()}</div>`;
+  }
+  function refresh(){
+    const side=document.getElementById('tpside');if(side&&side.offsetParent!==null)side.innerHTML=sideHTML();
+    if(document.body.classList.contains('tp-open')){const b=document.getElementById('tpdb');if(b){const sc=b.querySelector('.tp-body'),top=sc?sc.scrollTop:0;b.innerHTML=drawerHTML();const n=b.querySelector('.tp-body');if(n)n.scrollTop=top;}}
+    const s=stats(),fab=document.getElementById('tpfabc');if(fab)fab.textContent=s.md+'/'+s.mt;
+  }
+
+  /* ---------- montage du DOM ---------- */
+  const side=document.querySelector('.pg-side');
+  if(side){const d=document.createElement('div');d.className='tp-side';d.id='tpside';side.appendChild(d);}
+  const fab=document.createElement('button');fab.type='button';fab.id='tpfab';fab.className='tp-fab';fab.dataset.tp='open';fab.innerHTML='Test <span id="tpfabc">0/14</span>';document.body.appendChild(fab);
+  const dim=document.createElement('div');dim.className='tp-dim';dim.dataset.tp='close';document.body.appendChild(dim);
+  const dr=document.createElement('aside');dr.className='tp-drawer';dr.id='tpd';dr.setAttribute('role','dialog');dr.setAttribute('aria-label','Panneau de test');dr.innerHTML='<div class="tp-grip" data-tp="close"></div><div id="tpdb"></div>';document.body.appendChild(dr);
+  const tour=document.createElement('div');tour.className='tp-tour';tour.id='tptour';tour.hidden=true;tour.innerHTML='<span id="tptc">Visite automatique</span><button type="button" data-tp="stop">Arrêter</button>';document.body.appendChild(tour);
+
+  const openDrawer=()=>{document.body.classList.add('tp-open');refresh();};
+  const closeDrawer=()=>document.body.classList.remove('tp-open');
+  const goScreen=s=>{const t=document.querySelector('.pg-tabs [aria-selected="true"]');if(!t||t.dataset.t!=='proto')setTab('proto');if(s==='s1'&&S.scr==='home')resetInspection();S.toc=false;S.xs=null;S.scr=s;render();};
+  function setOffline(v){const cb=document.getElementById('offtoggle');if(cb){cb.checked=v;cb.dispatchEvent(new Event('change'));}else{S.offline=v;render();}}
+  function resetAll(){
+    stopTour();resetInspection();Object.keys(DONE).forEach(k=>delete DONE[k]);VIS.clear();COV.clear();
+    Object.assign(S,{offline:false,pending:0,finished:[],mySig:null,last:null,syncedOnce:false,log:[]});
+    const cb=document.getElementById('offtoggle');if(cb)cb.checked=false;
+    S.scr='home';render();toast('Maquette réinitialisée.');
+  }
+  function autofill(){
+    resetInspection();const t=T();
+    const z1=t.zones[1][0],z3=t.zones[3][0];
+    S.defects={[z1]:{type:t.defects[1],sev:'Moyen',cost:estimate(t.defects[1],'Moyen'),photos:1,comment:'Constaté à l\'arrivée du véhicule.'},[z3]:{type:t.defects[0],sev:'Léger',cost:estimate(t.defects[0],'Léger'),photos:1,comment:''}};
+    const g=gl(4)[0],k=g.key+'|1';S.st[k]='ko';S.notes[k]={comment:'Usure visible.',photos:1};
+    S.rem.s5='Moteur sain à froid. Freins à contrôler au prochain passage.';S.rem.g='Véhicule globalement sain, quelques points à surveiller.';
+    S.files=[{name:'Controle_fonctionnement.pdf',size:'67 ko'}];S.sig.insp=[SIG];if(!S.mySig)S.mySig=[SIG];
+    S.log.push({t:'14:10',m:'Inspection remplie automatiquement (démo)'});
+    S.verdict=null;S.scr='s6';S.xs=null;render();toast('Inspection remplie. Il ne reste qu\'à la terminer.');
+  }
+
+  /* ---------- visite automatique ---------- */
+  let tourT=[],tourOn=false;
+  function setCap(t){const e=document.getElementById('tptc');if(e)e.textContent=t;}
+  function stopTour(){tourT.forEach(clearTimeout);tourT=[];if(tourOn){tourOn=false;tour.hidden=true;}}
+  function startTour(){
+    stopTour();tourOn=true;tour.hidden=false;setCap('Visite automatique');
+    const T0=()=>T();
+    const steps=[
+     [700,()=>{resetInspection();S.scr='home';S.xs=null;render();},'Accueil : l\'agenda et le bouton +'],
+     [2300,()=>act('newinsp',{}),'Le bouton + démarre une inspection'],
+     [2300,()=>act('type',{v:'camion'}),'Le questionnaire change avec le véhicule'],
+     [2300,()=>act('type',{v:'voiture'}),'Retour à la voiture'],
+     [2200,()=>act('next',{}),'Papiers : tout est conforme par défaut'],
+     [2200,()=>act('next',{}),'Extérieur : le schéma du véhicule'],
+     [1900,()=>act('zone',{z:T0().zones[1][0]}),'Touchez une zone pour signaler un défaut'],
+     [1500,()=>act('stype',{v:T0().defects[1]}),'Type de défaut et coût estimé automatique'],
+     [1400,()=>act('sphoto',{}),'Une photo est obligatoire'],
+     [1400,()=>act('ssave',{}),'Défaut enregistré'],
+     [2200,()=>act('next',{}),'Intérieur : tout est coché'],
+     [2200,()=>act('next',{}),'Mécanique : mesures chiffrées'],
+     [2200,()=>act('next',{}),'Conclusion : score et verdict calculés'],
+     [2200,()=>{S.sig.insp=[SIG];act('sigend',{});},'Signature de l\'inspecteur'],
+     [2400,()=>act('finish',{}),'Terminer l\'inspection'],
+     [2400,()=>{if(S.scr==='flag'){act('flagall',{v:'act'});act('flagnext',{});}},'Les points signalés deviennent des actions'],
+     [2400,()=>{if(S.scr==='done')act('viewreport',{});},'Rapport prêt à envoyer']
+    ];
+    let at=0;
+    steps.forEach(s=>{at+=s[0];tourT.push(setTimeout(()=>{if(!tourOn)return;try{s[1]();}catch(e){}setCap(s[2]);},at));});
+    tourT.push(setTimeout(()=>{stopTour();toast('Visite terminée. À vous de jouer !');},at+2600));
+  }
+
+  /* ---------- évènements du panneau ---------- */
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('[data-tp]');if(!t)return;const a=t.dataset.tp;
+    if(a==='open')openDrawer();
+    else if(a==='close')closeDrawer();
+    else if(a==='tab'){tpTab=t.dataset.v;refresh();}
+    else if(a==='go'){closeDrawer();goScreen(t.dataset.s);}
+    else if(a==='offline'){setOffline(!S.offline);}
+    else if(a==='autofill'){closeDrawer();autofill();}
+    else if(a==='tour'){closeDrawer();startTour();}
+    else if(a==='stop'){stopTour();toast('Visite arrêtée.');}
+    else if(a==='reset'){closeDrawer();resetAll();}
+    else if(a==='welcome'){closeDrawer();stopTour();if(window.__openWelcome)window.__openWelcome();}
+    else if(a==='section'){closeDrawer();setTab(t.dataset.v);window.scrollTo(0,0);}
+    else if(a==='theme'){const v=t.dataset.v;if(v==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=v;refresh();}
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.tp-sw')){e.preventDefault();setOffline(!S.offline);}});
+
+  /* ---------- mode immersif mobile ---------- */
+  let baseH=window.innerHeight,lastW=window.innerWidth;
+  function applyImm(){
+    const sel=document.querySelector('.pg-tabs [aria-selected="true"]'),W=document.getElementById('welcome');
+    const on=mob()&&sel&&sel.dataset.t==='proto'&&W&&W.hidden;
+    document.body.classList.toggle('imm',!!on);fit();
+  }
+  window.__imm=applyImm;
+  const _fit=fit;
+  fit=function(){
+    const wrap=document.getElementById('phone');if(!wrap)return;
+    if(document.body.classList.contains('imm')){
+      const vw=document.documentElement.clientWidth,s=Math.min(vw/360,baseH/800);
+      wrap.style.width=Math.round(360*s)+'px';wrap.style.height=Math.round(800*s)+'px';
+      const f=wrap.firstElementChild;if(f)f.style.transform='scale('+s+')';
+    }else _fit();
+  };
+  const _setTab=setTab;
+  setTab=function(t){_setTab(t);applyImm();};
+  window.addEventListener('resize',()=>{if(window.innerWidth!==lastW){lastW=window.innerWidth;baseH=window.innerHeight;}else if(window.innerHeight>baseH)baseH=window.innerHeight;applyImm();});
+  window.addEventListener('orientationchange',()=>setTimeout(()=>{lastW=window.innerWidth;baseH=window.innerHeight;applyImm();},250));
+
+  /* ---------- transitions et suivi après chaque rendu ---------- */
+  const last={key:'',scr:'',sheet:''};
+  const idx=s=>NAV.findIndex(n=>n[0]===s);
+  const sheetKey=()=>S.xs?('x'+S.xs.k):S.act?'act':S.pt?'pt':S.sheet?'zone':S.toc?'toc':'';
+  const _render=render;
+  render=function(){
+    _render();
+    try{
+      const wrap=document.getElementById('phone'),fr=wrap&&wrap.firstElementChild;
+      if(fr){
+        const key=S.scr+'|'+S.sub3,sk=sheetKey();
+        if(last.key&&key!==last.key&&!RM){
+          const dir=S.scr===last.scr?'fade':(idx(S.scr)>=idx(last.scr)?'fwd':'back');
+          fr.classList.add('in-'+dir);setTimeout(()=>fr.classList.remove('in-'+dir),620);
+        }
+        if(sk&&sk!==last.sheet&&!RM)fr.querySelectorAll('.sheet,.sheetdim,.toc,.annot').forEach(e=>e.classList.add('in'));
+        last.key=key;last.scr=S.scr;last.sheet=sk;
+      }
+      VIS.add(S.scr);checkMissions();refresh();
+    }catch(e){}
+  };
+
+  /* ---------- démarrage ---------- */
+  setTimeout(()=>{try{TOTALSET=crawl();}catch(e){}refresh();},60);
+  checkMissions();refresh();
+})();
+
 /* ===== Accueil : funnel de bienvenue en 4 étapes ===== */
 (function(){
   const W=document.getElementById('welcome'),PG=document.querySelector('.pg');
@@ -1377,12 +1728,13 @@ const hh=(location.hash||'').slice(1); setTab(['proto','checks','store','style']
   }
   function openApp(tab){
     W.hidden=true;PG.hidden=false;if(timer){clearInterval(timer);timer=null;}
-    setTab(tab||'proto');fit();buildAssets();window.scrollTo(0,0);
+    setTab(tab||'proto');fit();buildAssets();window.scrollTo(0,0);if(window.__imm)window.__imm();
   }
   function openWelcome(){
-    PG.hidden=true;W.hidden=false;setScale();go(0);window.scrollTo(0,0);
+    PG.hidden=true;W.hidden=false;setScale();go(0);window.scrollTo(0,0);if(window.__imm)window.__imm();
     try{history.replaceState(null,'','#welcome');}catch(e){}
   }
+  window.__openWelcome=openWelcome;
   W.addEventListener('click',e=>{
     const b=e.target.closest('[data-w]');if(!b)return;const a=b.dataset.w;
     if(a==='next')go(cur+1);else if(a==='open')openApp('proto');else if(a.startsWith('tab:'))openApp(a.slice(4));
@@ -1395,7 +1747,7 @@ const hh=(location.hash||'').slice(1); setTab(['proto','checks','store','style']
   document.addEventListener('keydown',e=>{if(W.hidden)return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
   window.addEventListener('resize',()=>{if(!W.hidden)setScale();});
   const h=window.__h0||'';
-  if(TABS.includes(h)){W.hidden=true;PG.hidden=false;}else{openWelcome();}
+  if(TABS.includes(h)){W.hidden=true;PG.hidden=false;if(window.__imm)window.__imm();}else{openWelcome();}
 })();
 
 
